@@ -1,5 +1,20 @@
 Convolutional Attention Network
 ===============
+# env config
+
+
+    conda create -n py27 python=2.7 -y
+    conda activate py27
+    pip install numpy
+
+
+error
+
+      File "copy_conv_rec_learner.py", line 11, in <module>
+        from experimenter import ExperimentLogger
+    ImportError: No module named experimenter
+
+
 Code related to the paper:
 ```
 @inproceedings{allamanis2016convolutional,
