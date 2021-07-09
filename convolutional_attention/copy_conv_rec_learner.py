@@ -8,7 +8,7 @@ import time
 
 import numpy as np
 import re
-from experimenter import ExperimentLogger
+# from experimenter import ExperimentLogger
 
 from convolutional_attention.copy_conv_rec_model import CopyConvolutionalRecurrentAttentionalModel
 from convolutional_attention.f1_evaluator import F1Evaluator
@@ -289,26 +289,26 @@ if __name__ == "__main__":
     params["train_file"] = input_file
     if len(sys.argv) > 4:
         params["test_file"] = sys.argv[4]
-    with ExperimentLogger("ConvolutionalCopyAttentionalRecurrentLearner", params) as experiment_log:
-        if max_num_epochs:
-            model = ConvolutionalCopyAttentionalRecurrentLearner(params)
-            model.train(input_file, max_epochs=max_num_epochs)
-            model.save("copy_convolutional_att_rec_model" + os.path.basename(params["train_file"]) + ".pkl")
+    # with ExperimentLogger("ConvolutionalCopyAttentionalRecurrentLearner", params) as experiment_log:
+    if max_num_epochs:
+        model = ConvolutionalCopyAttentionalRecurrentLearner(params)
+        model.train(input_file, max_epochs=max_num_epochs)
+        model.save("copy_convolutional_att_rec_model" + os.path.basename(params["train_file"]) + ".pkl")
 
-        if params.get("test_file") is None:
-            exit()
+    if params.get("test_file") is None:
+        exit()
 
-        model2 = ConvolutionalCopyAttentionalRecurrentLearner.load("copy_convolutional_att_rec_model" + os.path.basename(params["train_file"]) + ".pkl")
+    model2 = ConvolutionalCopyAttentionalRecurrentLearner.load("copy_convolutional_att_rec_model" + os.path.basename(params["train_file"]) + ".pkl")
 
-        test_data, original_names = model2.naming_data.get_data_in_recurrent_copy_convolution_format(params["test_file"], model2.padding_size)
-        test_name_targets, test_code_sentences, test_code, test_target_is_unk, test_copy_vectors = test_data
-        #name_ll = model2.model.log_prob_with_targets(test_code_sentences, test_name_targets)
-        #print "Test name_ll=%s" % name_ll
+    test_data, original_names = model2.naming_data.get_data_in_recurrent_copy_convolution_format(params["test_file"], model2.padding_size)
+    test_name_targets, test_code_sentences, test_code, test_target_is_unk, test_copy_vectors = test_data
+    #name_ll = model2.model.log_prob_with_targets(test_code_sentences, test_name_targets)
+    #print "Test name_ll=%s" % name_ll
 
-        eval = F1Evaluator(model2)
-        point_suggestion_eval = eval.compute_names_f1(test_code, original_names,
-                                                      model2.naming_data.all_tokens_dictionary.get_all_names())
-        print point_suggestion_eval
-        results = point_suggestion_eval.get_f1_at_all_ranks()
-        print results
-        experiment_log.record_results({"f1_at_rank1": results[0], "f1_at_rank5":results[1]})
+    eval = F1Evaluator(model2)
+    point_suggestion_eval = eval.compute_names_f1(test_code, original_names,
+                                                  model2.naming_data.all_tokens_dictionary.get_all_names())
+    print point_suggestion_eval
+    results = point_suggestion_eval.get_f1_at_all_ranks()
+    print results
+        # experiment_log.record_results({"f1_at_rank1": results[0], "f1_at_rank5":results[1]})
