@@ -9,7 +9,8 @@ import time
 import numpy as np
 import re
 # from experimenter import ExperimentLogger
-
+import sys
+sys.path.append("..")
 from convolutional_attention.copy_conv_rec_model import CopyConvolutionalRecurrentAttentionalModel
 from convolutional_attention.f1_evaluator import F1Evaluator
 from convolutional_attention.token_naming_data import TokenCodeNamingData

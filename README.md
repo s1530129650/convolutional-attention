@@ -6,6 +6,8 @@ Convolutional Attention Network
     conda create -n py27 python=2.7 -y
     conda activate py27
     pip install numpy
+    python -m pip install Theano
+    conda install mkl-service -y
 
 
 error
@@ -14,6 +16,11 @@ error
         from experimenter import ExperimentLogger
     ImportError: No module named experimenter
 
+solution
+
+   ```
+   delete the code related to the experimenter
+   ```
 
 Code related to the paper:
 ```
