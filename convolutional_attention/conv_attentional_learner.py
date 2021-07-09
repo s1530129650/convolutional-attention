@@ -6,7 +6,7 @@ import os
 import time
 
 import numpy as np
-from experimenter import ExperimentLogger
+# from experimenter import ExperimentLogger
 
 from convolutional_attention.conv_attentional_model import ConvolutionalAttentionalModel
 from convolutional_attention.f1_evaluator import F1Evaluator
@@ -173,25 +173,25 @@ if __name__ == "__main__":
 
     params["train_file"] = input_file
     params["test_file"] = sys.argv[4]
-    with ExperimentLogger("ConvolutionalAttentionalLearner", params) as experiment_log:
-        model = ConvolutionalAttentionalLearner(params)
+    # with ExperimentLogger("ConvolutionalAttentionalLearner", params) as experiment_log:
+    model = ConvolutionalAttentionalLearner(params)
 
-        model.train(input_file, max_epochs=max_num_epochs)
+    model.train(input_file, max_epochs=max_num_epochs)
 
-        model.save("convolutional_att_model" + os.path.basename(params["train_file"]) + ".pkl")
+    model.save("convolutional_att_model" + os.path.basename(params["train_file"]) + ".pkl")
 
-        model2 = ConvolutionalAttentionalLearner.load("convolutional_att_model" + os.path.basename(params["train_file"]) + ".pkl")
+    model2 = ConvolutionalAttentionalLearner.load("convolutional_att_model" + os.path.basename(params["train_file"]) + ".pkl")
 
-        test_data, original_names = model2.naming_data.get_data_in_convolution_format(sys.argv[4], model2.name_cx_size, model2.padding_size)
-        test_name_targets, test_name_contexts, test_code_sentences, test_original_name_ids = test_data
-        name_ll = model2.model.log_prob_with_targets(test_name_contexts, test_code_sentences, test_name_targets)
-        print "Test name_ll=%s" % name_ll
+    test_data, original_names = model2.naming_data.get_data_in_convolution_format(sys.argv[4], model2.name_cx_size, model2.padding_size)
+    test_name_targets, test_name_contexts, test_code_sentences, test_original_name_ids = test_data
+    name_ll = model2.model.log_prob_with_targets(test_name_contexts, test_code_sentences, test_name_targets)
+    print "Test name_ll=%s" % name_ll
 
-        ids, unique_idx = np.unique(test_original_name_ids, return_index=True)
-        eval = F1Evaluator(model2)
-        point_suggestion_eval = eval.compute_names_f1(test_code_sentences[unique_idx], original_names,
-                                                      model2.naming_data.all_tokens_dictionary.get_all_names())
-        print point_suggestion_eval
-        results = point_suggestion_eval.get_f1_at_all_ranks()
-        print results
-        experiment_log.record_results({"f1_at_rank1": results[0], "f1_at_rank5":results[1]})
+    ids, unique_idx = np.unique(test_original_name_ids, return_index=True)
+    eval = F1Evaluator(model2)
+    point_suggestion_eval = eval.compute_names_f1(test_code_sentences[unique_idx], original_names,
+                                                  model2.naming_data.all_tokens_dictionary.get_all_names())
+    print point_suggestion_eval
+    results = point_suggestion_eval.get_f1_at_all_ranks()
+    print results
+        # experiment_log.record_results({"f1_at_rank1": results[0], "f1_at_rank5":results[1]})
