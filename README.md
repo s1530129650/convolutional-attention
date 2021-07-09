@@ -34,6 +34,11 @@ To train the `copy_attention` model with the data use
 ```
 > python copy_conv_rec_learner.py <training_file> <max_num_epochs> <D> <test_file>
 ```
+
+```
+> python copy_conv_rec_learner.py training_file 100 128 test_file
+```
+
 were `D` is the embedding space dimenssion (128 in paper.)
 The best model will be saved at `<training_file>.pkl`
 
